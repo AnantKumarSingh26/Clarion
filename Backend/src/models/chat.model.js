@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const chatSchema = new mongoose.Schema({
     user: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
@@ -15,6 +15,6 @@ const chatSchema = new mongoose.Schema({
     { timestamps: true }
 )
 
-const Chat = mongoose.model('Chat', chatSchema)
+const chatModel = mongoose.model('Chat', chatSchema)
 
-export default Chat
+export default chatModel

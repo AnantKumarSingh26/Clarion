@@ -1,8 +1,9 @@
 import {Router} from "express"
-import { registerValidator } from "../validators/auth.validator"
+import {register} from '../controller/auth.controller.js'
+import { registerValidator } from "../validators/auth.validator.js"
 
 const authRouter = Router()
 
-authRouter.post("/register",registerValidator,)
+authRouter.post("/register",registerValidator,register)
 
 export default authRouter

@@ -1,14 +1,14 @@
-import userModel from "../models/user.model";
+import userModel from "../models/user.model.js";
 import jwt from 'jsonwebtoken'
+import { sendEmail } from "../service/mail.service.js";
 
 
+export async function register(req, res) {
 
-async function register(req, res) {
-
-    const { userName, email, password } = req.body
+    const { username, email, password } = req.body
     try {
         const isUserAlreadyExists = await userModel.findOne({
-            $or: [{ email }, { userName }]
+            $or: [{ email }, { username }]
         })
 
         if (isUserAlreadyExists) {
@@ -19,8 +19,30 @@ async function register(req, res) {
             })
         }
 
-        const user = await userModel.create({ userName, email, password })
-    } catch (error) {
+        const user = await userModel.create({ username, email, password })
 
+        await sendEmail(
+             email,
+            " Welcome to Clarion",
+            ` <p>Hello ${username}</p>
+            <p>Thank you for registering at <strong>Clarion</strong>. We're excited to have on board!</p>
+             <p>Best regards, <br>The Clarion Team    </p>`
+        )
+
+        res.status(201).json({
+            message: 'User registered successfully',
+            success: true,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email
+            }
+        })
+    } catch (error) {
+        console.error(`Error: ${error}`)
+        return res.status(500).json({
+            success:false,
+
+        })
     }
 }

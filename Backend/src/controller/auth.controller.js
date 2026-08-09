@@ -21,11 +21,16 @@ export async function register(req, res) {
 
         const user = await userModel.create({ username, email, password })
 
+        const emailVerificationToken = jwt.sign({
+            email:user.email
+        },process.env.JWT_SECRET)
+
         await sendEmail(
              email,
             " Welcome to Clarion",
             ` <p>Hello ${username}</p>
             <p>Thank you for registering at <strong>Clarion</strong>. We're excited to have on board!</p>
+            <a href="" ></a>
              <p>Best regards, <br>The Clarion Team    </p>`
         )
 

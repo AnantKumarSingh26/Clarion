@@ -1,17 +1,22 @@
 import { useState } from "react"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
+import { useAuth } from "../hook/useAuthg"
 
 const Login = () => {
 const [email, setEmail] = useState("")
 const [password, setPassword] = useState("")
+const navigate = useNavigate()
+const {handleLogin} = useAuth()
 
-const submitForm = (event)=>{
+const submitForm =async (event)=>{
     event.preventDefault()
 
     const payload ={
         email,
         password
     }
+    await handleLogin(payload)
+    navigate('/')
     console.log('Login Data: ', payload)
 }
 

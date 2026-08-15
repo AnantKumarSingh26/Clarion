@@ -2,23 +2,31 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { useAuth } from "../hook/useAuthg"
 
+
 const Login = () => {
-const [email, setEmail] = useState("")
-const [password, setPassword] = useState("")
-const navigate = useNavigate()
-const {handleLogin} = useAuth()
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
-const submitForm =async (event)=>{
-    event.preventDefault()
+    const navigate = useNavigate()
+    const { handleLogin } = useAuth()
 
-    const payload ={
-        email,
-        password
+    const submitForm = async (event) => {
+        event.preventDefault()
+
+        const payload = {
+            email,
+            password
+        }
+        try {
+            await handleLogin(payload)
+            navigate('/')
+            console.log('Login Data: ', payload)
+        } catch (err) {
+            console.error("Login failed:", err.response?.data || err.message)
+        }
+
     }
-    await handleLogin(payload)
-    navigate('/')
-    console.log('Login Data: ', payload)
-}
+
 
 
     return (
@@ -31,11 +39,11 @@ const submitForm =async (event)=>{
                 </div>
                 <div className="flex flex-col gap-2 mb-5">
                     <label htmlFor="email">Email</label>
-                    <input onChange={(e)=>setEmail(e.target.value)} type="email" id="email" placeholder="you@mail.com" className="mail bg-mist-700 p-2 rounded text-white" />
+                    <input onChange={(e) => setEmail(e.target.value)} type="email" id="email" placeholder="you@mail.com" className="mail bg-mist-700 p-2 rounded text-white" />
                 </div>
                 <div className="flex flex-col gap-2 mb-5">
                     <label htmlFor="pwd">Password</label>
-                    <input onChange={(e)=>setPassword(e.target.value)} type="password" id="pwd" placeholder="Enter password" className="pwd bg-mist-700 p-2 rounded text-white " />
+                    <input onChange={(e) => setPassword(e.target.value)} type="password" id="pwd" placeholder="Enter password" className="pwd bg-mist-700 p-2 rounded text-white " />
                 </div>
                 <div className="flex flex-col gap-1 mt-2">
                     <button className=" bg-[#45C7D4] text-black py-1 rounded mt-2  active:scale-[0.95] transition-all font-bold text-[1.2rem]">Login</button>

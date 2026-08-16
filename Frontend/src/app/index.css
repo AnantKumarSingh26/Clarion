@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+@theme {
+  /* --- ACCENT COLORS --- */
+  /* Logo icon/text, active sidebar menu details, "New Chat" button background, user message bubble, send button, icons, code properties */
+  --color-clarion-primary: #36e5f5;
+  /* Notification counter bubble */
+  --color-clarion-danger: #ef4444;
+  /* Online status dot */
+  --color-clarion-success: #10b981;
+  /* --- BACKGROUND COLORS --- */
+  /* Main content area, top bar of chat window, input bar */
+  --color-clarion-bgBody: #111827;
+  /* Left sidebar main background */
+  --color-clarion-bgSidebar: #1f2937;
+  /* The outermost dark grey frame/container */
+  --color-clarion-bgOuter: #0b1120;
+  /* Background for AI response bubbles, dark circular profile placeholders */
+  --color-clarion-bubbleAI: #2d3a4f;
+  /* Background within the AI message code block */
+  --color-clarion-codeBlock: #0b1120;
+  /* --- TYPOGRAPHY COLORS --- */
+  /* 'CLARION' logo text, chat headers, main AI text body, user names */
+  --color-clarion-textMain: #ffffff;
+  /* Main sidebar menu items, AI status subtext, profile text 'JD' */
+  --color-clarion-textLight: #d1d5db;
+  /* Sidebar history items text, 'Message Clarion...' placeholder text */
+  --color-clarion-textMuted: #6b7280;
+  /* User Message Text (Dark text sitting on the cyan user bubble) */
+  --color-clarion-textInverse: #111827;
+  /* "New Chat" Button Text/Icon (Dark teal text on the cyan background) */
+  --color-clarion-textButton: #164e63;
+}

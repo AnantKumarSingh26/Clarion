@@ -2,23 +2,37 @@ import { useSelector } from "react-redux";
 import { useChat } from "../hooks/useChat";
 import { useEffect, useState } from "react";
 
+
 const Dashboard = () => {
   const chat = useChat();
 
   const { user } = useSelector((state) => state.auth);
 
   const [message, setMessage] = useState("");
+  
+  const [chatInput, setChatInput] = useState("")
+  const [userMessage, setUserMessage] = useState('')
+
+  const chats = useSelector((state)=>state.chat.chats)
+  const currentChatId = useSelector((state)=>state.chat.currentChatId)
+
 
   useEffect(() => {
     chat.initializeSocketConnection();
+    chat.handleGetChats();
   }, []);
+
+  const openChat= (chatId)=>{
+    
+  }
+
 
   return (
     <div className="flex h-screen overflow-hidden bg-clarion-bgOuter text-clarion-textMain">
-      
+
       {/* ================= SIDEBAR ================= */}
       <aside className="w-[260px] bg-clarion-bgSidebar border-r border-white/5 p-4 flex flex-col">
-        
+
         {/* LOGO */}
         <div className="relative flex items-center gap-3 px-2 mb-10">
           <div className="absolute w-24 h-24 bg-clarion-primary/20 blur-3xl rounded-full pointer-events-none" />
@@ -58,16 +72,6 @@ const Dashboard = () => {
           <div className="space-y-1">
             <button className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-clarion-textLight hover:bg-clarion-bubbleAI transition">
               <i className="ri-message-3-line" />
-              <span className="truncate">Explain React Hooks</span>
-            </button>
-
-            <button className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-clarion-textLight hover:bg-clarion-bubbleAI transition">
-              <i className="ri-message-3-line" />
-              <span className="truncate">Build a REST API</span>
-            </button>
-
-            <button className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-clarion-textLight hover:bg-clarion-bubbleAI transition">
-              <i className="ri-message-3-line" />
               <span className="truncate">JavaScript Concepts</span>
             </button>
           </div>
@@ -76,7 +80,7 @@ const Dashboard = () => {
         {/* USER PROFILE */}
         <div className="border-t border-white/10 pt-4">
           <button className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-clarion-bubbleAI transition">
-            
+
             <div className="w-10 h-10 rounded-full bg-clarion-primary/15 border border-clarion-primary/30 flex items-center justify-center text-clarion-primary font-semibold">
               {user?.name?.charAt(0)?.toUpperCase() || "U"}
             </div>
@@ -98,13 +102,13 @@ const Dashboard = () => {
 
       {/* ================= MAIN ================= */}
       <main className="relative flex-1 flex flex-col bg-clarion-bgBody overflow-hidden">
-        
+
         {/* BACKGROUND GLOW */}
         <div className="absolute top-[-150px] left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-clarion-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
         {/* HEADER */}
         <header className="relative z-10 h-[70px] px-8 flex items-center justify-between border-b border-white/5">
-          
+
           <div>
             <h2 className="font-medium text-clarion-textMain">
               New Conversation
@@ -128,9 +132,9 @@ const Dashboard = () => {
 
         {/* ================= HERO ================= */}
         <section className="relative z-10 flex-1 flex flex-col items-center justify-center px-6">
-          
+
           <div className="text-center max-w-2xl mb-10">
-            
+
             {/* AI ICON */}
             <div className="relative inline-flex items-center justify-center mb-6">
               <div className="absolute w-32 h-32 bg-clarion-primary/20 blur-3xl rounded-full" />
@@ -152,7 +156,7 @@ const Dashboard = () => {
 
           {/* SUGGESTIONS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl mb-8">
-            
+
             <button className="group p-4 text-left rounded-xl bg-clarion-bubbleAI/30 border border-white/5 hover:border-clarion-primary/30 hover:bg-clarion-bubbleAI transition">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-clarion-primary/10 flex items-center justify-center">

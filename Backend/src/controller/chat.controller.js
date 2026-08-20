@@ -4,31 +4,30 @@ import messageModel from "../models/message.model.js";
 
 
 export async function sendMessage(req, res) {
-    const { message, chat: chatId } = req.body;
+    const chatId = req.body.chatId || req.body.chat;
+    const { message, webSearch } = req.body;
 
     let title = null, chat = null
-
 
     if (!chatId) {
         title = await generateChatTitle(message)
         chat = await chatModel.create({
             user: req.user.id,
             title,
-
         })
     }
     const currentChatId = chatId || chat._id;
 
     const userMessage = await messageModel.create({
-        chat: chatId || chat._id,
+        chat: currentChatId,
         content: message,
         role: 'user'
     })
 
     const messages = await messageModel.find({ chat: currentChatId })
-    const result = await generateResponse(messages)
+    const result = await generateResponse(messages, webSearch)
     const aiMessage = await messageModel.create({
-        chat: chatId || chat._id,
+        chat: currentChatId,
         content: result,
         role: 'ai'
     })
@@ -37,7 +36,7 @@ export async function sendMessage(req, res) {
 
     res.status(201).json({
         title: title,
-        chat,
+        chat: chat || { _id: currentChatId },
         aiMessage
     })
 }

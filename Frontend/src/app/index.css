@@ -1,4 +1,7 @@
 @import "tailwindcss";
+.chat-body::-webkit-scrollbar {
+    display: none;
+}
 
 @theme {
   /* --- ACCENT COLORS --- */

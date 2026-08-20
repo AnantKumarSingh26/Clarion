@@ -14,6 +14,7 @@ const Dashboard = () => {
 
   const [inputMessage, setInputMessage] = useState("");
   const [webSearch, setWebSearch] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -141,7 +142,12 @@ const Dashboard = () => {
               )}
             </div>
 
-            <div className="flex-1 overflow-y-auto space-y-1 pr-1 custom-scrollbar">
+            <div className="flex-1 space-y-1 pr-1 
+             overflow-y-auto h-48 
+            [&::-webkit-scrollbar]:w-1 
+            [&::-webkit-scrollbar-track]:bg-slate-100 
+            [&::-webkit-scrollbar-thumb]:bg-clarion-primary 
+            [&::-webkit-scrollbar-thumb]:rounded-full">
               {chatList.length === 0 ? (
                 <div className="text-center py-8 px-2 text-clarion-textMuted text-xs">
                   <i className="ri-chat-voice-line text-2xl mb-2 block opacity-40" />
@@ -253,7 +259,7 @@ const Dashboard = () => {
         {/* ================= CHAT BODY ================= */}
         {activeChat && activeMessages.length > 0 ? (
           /* ACTIVE CHAT MESSAGE STREAM */
-          <div className="relative z-10 flex-1 overflow-y-auto px-4 md:px-12 py-6 space-y-5">
+          <div className="chat-body relative z-10 flex-1 overflow-y-auto px-4 md:px-12 py-6 space-y-5">
             {activeMessages.map((msg, index) => {
               const isUser = msg.role === "user";
               return (
@@ -284,7 +290,8 @@ const Dashboard = () => {
 
                   {isUser && (
                     <div className="w-8 h-8 rounded-xl bg-clarion-primary/20 border border-clarion-primary/40 flex items-center justify-center text-clarion-primary font-bold text-xs shrink-0 mt-0.5">
-                      {userInitial}
+                      {/* {userInitial} */}
+                      <i class="ri-user-fill"></i>
                     </div>
                   )}
                 </div>
@@ -446,8 +453,8 @@ const Dashboard = () => {
                   flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer shrink-0 select-none
                   ${
                     webSearch
-                      ? "bg-clarion-primary/20 text-clarion-primary border border-clarion-primary/40 shadow-[0_0_12px_rgba(54,229,245,0.25)]"
-                      : "text-clarion-textMuted hover:text-clarion-textLight hover:bg-white/5 border border-transparent"
+                      ? "bg-clarion-primary/20 text-clarion-primary border border-cyan-400 shadow-[0_0_12px_rgba(54,229,245,0.25)]"
+                      : "text-clarion-textMuted hover:text-clarion-textLight hover:bg-white/5 border border-clarion-primary/40 shadow-[0_0_12px_rgba(54,229,245,0.25)]"
                   }
                 `}
               >

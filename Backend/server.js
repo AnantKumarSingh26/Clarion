@@ -16,7 +16,8 @@ connectToDB()
         console.error('Mongo connection failed: ', err)
         process.exit(1)
     })
+const PORT = process.env.PORT || 3000
 
-httpServer.listen(3000, () => {
-    console.log("Server is running on PORT-3000")
+httpServer.listen(PORT, () => {
+    console.log("Server is running on PORT-",PORT)
 })

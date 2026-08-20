@@ -1,4 +1,290 @@
 @import "tailwindcss";
+.chat-body::-webkit-scrollbar {
+    display: none;
+}
+
+/* =========================
+   CYBER GRID
+========================= */
+
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(69, 199, 212, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(69, 199, 212, 0.07) 1px, transparent 1px);
+
+  background-size: 50px 50px;
+
+  mask-image: radial-gradient(
+    ellipse at center,
+    black 20%,
+    transparent 75%
+  );
+
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 50px 50px;
+  }
+}
+
+
+/* =========================
+   AURORA BLOBS
+========================= */
+
+.aurora {
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  border-radius: 50%;
+
+  filter: blur(120px);
+
+  opacity: 0.25;
+
+  pointer-events: none;
+}
+
+.aurora-1 {
+  background: #45c7d4;
+
+  top: -200px;
+  left: -150px;
+
+  animation: auroraOne 12s ease-in-out infinite alternate;
+}
+
+.aurora-2 {
+  background: #167a86;
+
+  bottom: -250px;
+  right: -150px;
+
+  animation: auroraTwo 15s ease-in-out infinite alternate;
+}
+
+.aurora-3 {
+  background: #45c7d4;
+
+  top: 40%;
+  left: 55%;
+
+  opacity: 0.12;
+
+  animation: auroraThree 18s ease-in-out infinite alternate;
+}
+
+
+@keyframes auroraOne {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+
+  to {
+    transform: translate(250px, 150px) scale(1.5);
+  }
+}
+
+@keyframes auroraTwo {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+
+  to {
+    transform: translate(-250px, -150px) scale(1.4);
+  }
+}
+
+@keyframes auroraThree {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-20%, -30%) rotate(180deg) scale(1.4);
+  }
+}
+
+
+/* =========================
+   PARTICLES
+========================= */
+
+.particle {
+  position: absolute;
+
+  width: 4px;
+  height: 4px;
+
+  background: #45c7d4;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 10px #45c7d4,
+    0 0 20px #45c7d4;
+
+  animation: particleFloat 10s linear infinite;
+}
+
+.particle-1 {
+  left: 10%;
+  top: 20%;
+}
+
+.particle-2 {
+  left: 80%;
+  top: 15%;
+
+  animation-delay: -2s;
+}
+
+.particle-3 {
+  left: 15%;
+  bottom: 20%;
+
+  animation-delay: -5s;
+}
+
+.particle-4 {
+  right: 20%;
+  bottom: 15%;
+
+  animation-delay: -7s;
+}
+
+.particle-5 {
+  left: 40%;
+  top: 10%;
+
+  animation-delay: -3s;
+}
+
+.particle-6 {
+  right: 10%;
+  top: 55%;
+
+  animation-delay: -8s;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateY(-120px) translateX(40px);
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-250px) translateX(-30px);
+    opacity: 0;
+  }
+}
+
+
+/* =========================
+   ORBITS
+========================= */
+
+.orbit {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+
+  animation: rotateOrbit 25s linear infinite;
+}
+
+.orbit-2 {
+  animation-duration: 40s;
+  animation-direction: reverse;
+}
+
+.orbit-dot {
+  position: absolute;
+
+  width: 10px;
+  height: 10px;
+
+  top: 50%;
+  left: -5px;
+
+  background: #45c7d4;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 15px #45c7d4,
+    0 0 30px #45c7d4;
+}
+
+.orbit-dot.small {
+  width: 6px;
+  height: 6px;
+}
+
+@keyframes rotateOrbit {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+
+/* =========================
+   ANIMATED BORDER
+========================= */
+
+.animated-border {
+  background: linear-gradient(
+    120deg,
+    transparent,
+    #45c7d4,
+    transparent,
+    #45c7d4,
+    transparent
+  );
+
+  background-size: 300% 300%;
+
+  animation: borderFlow 6s linear infinite;
+}
+
+@keyframes borderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 300% 50%;
+  }
+}
+
 
 @theme {
   /* --- ACCENT COLORS --- */

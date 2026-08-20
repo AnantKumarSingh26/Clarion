@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useChat } from "../hooks/useChat";
 import { useEffect, useState, useRef } from "react";
+import MarkdownRenderer from "../components/MarkdownRenderer";
 
 const Dashboard = () => {
   const chat = useChat();
@@ -12,6 +13,7 @@ const Dashboard = () => {
   const error = useSelector((state) => state.chat.error);
 
   const [inputMessage, setInputMessage] = useState("");
+  const [webSearch, setWebSearch] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -48,6 +50,7 @@ const Dashboard = () => {
     await chat.handleSendMessage({
       message: messageText,
       chatId: currentChatId,
+      webSearch,
     });
   };
 
@@ -57,6 +60,7 @@ const Dashboard = () => {
     await chat.handleSendMessage({
       message: prompt,
       chatId: currentChatId,
+      webSearch,
     });
   };
 
@@ -152,20 +156,18 @@ const Dashboard = () => {
                       onClick={() => handleOpenChat(item.id)}
                       className={`
                         group relative w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-sm transition-all cursor-pointer
-                        ${
-                          isActive
-                            ? "bg-clarion-bubbleAI text-clarion-primary font-medium border border-clarion-primary/30 shadow-sm"
-                            : "text-clarion-textLight hover:bg-clarion-bubbleAI/50 hover:text-white"
+                        ${isActive
+                          ? "bg-clarion-bubbleAI text-clarion-primary font-medium border border-clarion-primary/30 shadow-sm"
+                          : "text-clarion-textLight hover:bg-clarion-bubbleAI/50 hover:text-white"
                         }
                       `}
                     >
                       <div className="flex items-center gap-2.5 overflow-hidden flex-1">
                         <i
-                          className={`ri-message-3-line text-base shrink-0 ${
-                            isActive
+                          className={`ri-message-3-line text-base shrink-0 ${isActive
                               ? "text-clarion-primary"
                               : "text-clarion-textMuted group-hover:text-clarion-textLight"
-                          }`}
+                            }`}
                         />
                         <span className="truncate text-xs">
                           {item.title || "Untitled Chat"}
@@ -257,9 +259,8 @@ const Dashboard = () => {
               return (
                 <div
                   key={msg._id || index}
-                  className={`flex items-start gap-3.5 ${
-                    isUser ? "justify-end" : "justify-start"
-                  }`}
+                  className={`flex items-start gap-3.5 ${isUser ? "justify-end" : "justify-start"
+                    }`}
                 >
                   {!isUser && (
                     <div className="w-8 h-8 rounded-xl bg-clarion-bubbleAI border border-clarion-primary/30 flex items-center justify-center text-clarion-primary shrink-0 mt-0.5 shadow-sm">
@@ -270,14 +271,15 @@ const Dashboard = () => {
                   <div
                     className={`
                       max-w-[80%] md:max-w-[70%] p-4 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words shadow-md
-                      ${
-                        isUser
-                          ? "bg-clarion-primary text-clarion-textInverse font-medium rounded-tr-none"
-                          : "bg-clarion-bubbleAI/80 border border-white/5 text-clarion-textMain rounded-tl-none"
+                      ${isUser
+                        ? "bg-clarion-primary text-clarion-textInverse font-medium rounded-tr-none"
+                        : "bg-clarion-bubbleAI/80 border border-white/5 text-clarion-textMain rounded-tl-none"
                       }
                     `}
                   >
-                    {msg.content}
+                    <MarkdownRenderer
+                      content={msg.content}
+                    />
                   </div>
 
                   {isUser && (
@@ -434,13 +436,31 @@ const Dashboard = () => {
             onSubmit={handleSendMessage}
             className="w-full max-w-3xl mx-auto"
           >
-            <div className="flex items-center gap-3 p-1.5 pl-4 rounded-2xl bg-clarion-bubbleAI border border-white/10 focus-within:border-clarion-primary/50 focus-within:ring-1 focus-within:ring-clarion-primary/30 transition shadow-inner">
+            <div className="flex items-center gap-2.5 p-1.5 pl-3 rounded-2xl bg-clarion-bubbleAI border border-white/10 focus-within:border-clarion-primary/50 focus-within:ring-1 focus-within:ring-clarion-primary/30 transition shadow-inner">
+              {/* WEB SEARCH TOGGLE BUTTON */}
+              <button
+                type="button"
+                onClick={() => setWebSearch((prev) => !prev)}
+                title={webSearch ? "Web Search Active (Click to turn off)" : "Enable Web Search (Real-time live info)"}
+                className={`
+                  flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 cursor-pointer shrink-0 select-none
+                  ${
+                    webSearch
+                      ? "bg-clarion-primary/20 text-clarion-primary border border-clarion-primary/40 shadow-[0_0_12px_rgba(54,229,245,0.25)]"
+                      : "text-clarion-textMuted hover:text-clarion-textLight hover:bg-white/5 border border-transparent"
+                  }
+                `}
+              >
+                <i className={`text-base ${webSearch ? "ri-global-fill" : "ri-global-line"}`} />
+                <span className="hidden sm:inline text-[11px] font-semibold">Search</span>
+              </button>
+
               <input
                 ref={inputRef}
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Message Clarion..."
+                placeholder={webSearch ? "Search live web & message Clarion..." : "Message Clarion..."}
                 disabled={isLoading}
                 className="flex-1 bg-transparent outline-none text-sm text-white placeholder:text-clarion-textMuted disabled:opacity-50"
               />

@@ -5,7 +5,7 @@ import messageModel from "../models/message.model.js";
 
 export async function sendMessage(req, res) {
     const chatId = req.body.chatId || req.body.chat;
-    const { message } = req.body;
+    const { message, webSearch } = req.body;
 
     let title = null, chat = null
 
@@ -25,7 +25,7 @@ export async function sendMessage(req, res) {
     })
 
     const messages = await messageModel.find({ chat: currentChatId })
-    const result = await generateResponse(messages)
+    const result = await generateResponse(messages, webSearch)
     const aiMessage = await messageModel.create({
         chat: currentChatId,
         content: result,

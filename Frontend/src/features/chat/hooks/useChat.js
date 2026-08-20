@@ -15,11 +15,11 @@ import {
 export const useChat = () => {
     const dispatch = useDispatch()
 
-    async function handleSendMessage({ message, chatId }) {
+    async function handleSendMessage({ message, chatId, webSearch }) {
         if (!message || !message.trim()) return;
         dispatch(setLoading(true))
         try {
-            const data = await sendMessage({ message, chatId })
+            const data = await sendMessage({ message, chatId, webSearch })
             const { title, chat, aiMessage } = data
             const activeChatId = chatId || chat?._id
 
@@ -55,7 +55,7 @@ export const useChat = () => {
         }
     }
 
-    async function handleGetChats() {
+    async function handleGetChats() { 
         dispatch(setLoading(true))
         try {
             const data = await getChats()

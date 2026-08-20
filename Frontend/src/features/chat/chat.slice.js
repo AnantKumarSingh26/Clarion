@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const chatSlice = createSlice({
     name: 'chat',
-    initialStat: {
+    initialState: {
         chats: {},
         currentChatId: null,
         isLoading: false,
@@ -11,24 +11,56 @@ const chatSlice = createSlice({
     },
     reducers: {
         createNewChat: (state, action) => {
-            const { chatId, title } = action.payload
+            const { chatId, title, messages = [] } = action.payload
             state.chats[chatId] = {
                 id: chatId,
-                title,
-                message: [],
-                lastUpdated: new Date().toISOString,
+                title: title || 'New Chat',
+                messages: messages || [],
+                lastUpdated: new Date().toISOString(),
             }
         },
         addNewMessage: (state, action) => {
-            const { chatId, content, role } = action.payload
-            state.chats[chatId].message.push({ content, role })
+            const { chatId, content, role, id, createdAt } = action.payload
+            if (!state.chats[chatId]) {
+                state.chats[chatId] = {
+                    id: chatId,
+                    title: 'New Chat',
+                    messages: [],
+                    lastUpdated: new Date().toISOString()
+                }
+            }
+            if (!state.chats[chatId].messages) {
+                state.chats[chatId].messages = []
+            }
+            state.chats[chatId].messages.push({
+                _id: id || Date.now().toString(),
+                content,
+                role,
+                createdAt: createdAt || new Date().toISOString()
+            })
+            state.chats[chatId].lastUpdated = new Date().toISOString()
         },
         addMessages: (state, action) => {
             const { chatId, messages } = action.payload
-            state.chats[chatId].messages.push(...messages)
+            if (!state.chats[chatId]) {
+                state.chats[chatId] = {
+                    id: chatId,
+                    title: 'New Chat',
+                    messages: [],
+                    lastUpdated: new Date().toISOString()
+                }
+            }
+            state.chats[chatId].messages = messages || []
         },
         setChats: (state, action) => {
-            state.chats = action.payload
+            state.chats = action.payload || {}
+        },
+        removeChat: (state, action) => {
+            const chatId = action.payload
+            delete state.chats[chatId]
+            if (state.currentChatId === chatId) {
+                state.currentChatId = null
+            }
         },
         setCurrentChatId: (state, action) => {
             state.currentChatId = action.payload
@@ -42,5 +74,14 @@ const chatSlice = createSlice({
     }
 })
 
-export const { setChats, setCurrentChatId, setLoading, setError, createNewChat, addNewMessage, addMessages } = chatSlice.actions
+export const {
+    setChats,
+    setCurrentChatId,
+    setLoading,
+    setError,
+    createNewChat,
+    addNewMessage,
+    addMessages,
+    removeChat
+} = chatSlice.actions
 export default chatSlice.reducer

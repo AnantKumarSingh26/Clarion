@@ -2,6 +2,8 @@ import { useSelector } from "react-redux";
 import { useChat } from "../hooks/useChat";
 import { useEffect, useState, useRef } from "react";
 import MarkdownRenderer from "../components/MarkdownRenderer";
+import { useNavigate } from "react-router";
+import { useAuth } from "../../auth/hook/useAuthg";
 
 const Dashboard = () => {
   const chat = useChat();
@@ -61,6 +63,15 @@ const Dashboard = () => {
   useEffect(() => {
     inputRef.current?.focus();
   }, [currentChatId]);
+
+  // ! Logout
+const auth = useAuth()
+const navigate = useNavigate();
+const handleLogout =async () => {
+ await auth.handleLogout()
+
+  navigate("/login");
+};
 
   const handleSendMessage = async (e) => {
     if (e) e.preventDefault();
@@ -231,12 +242,9 @@ const Dashboard = () => {
                 items-center
                 justify-center
                 rounded-lg
-
                 text-clarion-textMuted
-
                 hover:bg-white/10
                 hover:text-clarion-primary
-
                 transition
                 cursor-pointer
               "
@@ -508,13 +516,25 @@ const Dashboard = () => {
 
             <div
               className="
-                w-2 h-2
-                rounded-full
-                bg-clarion-success
-                shrink-0
-              "
-              title="Online"
-            />
+    w-7 h-7
+    rounded-full
+    flex
+    items-center
+    justify-center
+    shrink-0
+    text-2xl
+    text-red-500
+    cursor-pointer
+    transition-all
+    hover:text-red-400
+    hover:scale-110
+    active:scale-90
+  "
+              onClick={handleLogout}
+              title="Logout"
+            >
+              <i className="ri-logout-box-line"></i>
+            </div>
 
           </div>
 

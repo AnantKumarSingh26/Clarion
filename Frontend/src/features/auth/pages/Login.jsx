@@ -25,6 +25,14 @@ const Login = () => {
       console.error("Login failed:", err.response?.data || err.message);
     }
   };
+  const [showIntro, setShowIntro] = useState(
+    sessionStorage.getItem("clarionIntroSeen") !== "true"
+  );
+
+  const closeIntro = () => {
+    sessionStorage.setItem("clarionIntroSeen", "true");
+    setShowIntro(false);
+  };
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050b12] text-white flex items-center justify-center p-4">
@@ -55,6 +63,88 @@ const Login = () => {
       <div className="absolute w-[700px] h-[700px] border border-[#45C7D4]/5 rounded-full orbit orbit-2">
         <div className="orbit-dot small" />
       </div>
+
+      {showIntro && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#050b12]/95 backdrop-blur-xl p-4">
+
+          {/* Glow */}
+          <div className="absolute w-80 h-80 bg-[#45C7D4]/20 blur-[120px] rounded-full" />
+
+          <div className="relative w-full max-w-lg text-center">
+
+            {/* Robot */}
+            <div className="relative flex justify-center mb-8">
+
+              <div className="absolute inset-0 m-auto w-28 h-28 bg-[#45C7D4]/30 blur-3xl rounded-full animate-pulse" />
+
+              <div
+                className="
+            relative
+            w-24 h-24
+            rounded-3xl
+            bg-[#45C7D4]/10
+            border border-[#45C7D4]/40
+            flex items-center justify-center
+            shadow-[0_0_50px_rgba(69,199,212,0.35)]
+          "
+              >
+                <i className="ri-robot-2-line text-5xl text-[#45C7D4]" />
+              </div>
+
+            </div>
+
+            {/* Heading */}
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+              Hi, I'm{" "}
+              <span className="text-[#45C7D4]">
+                Anant {'{ '}<i class="ri-infinity-line"></i>{' }'}
+              </span>{" "}
+              👋
+            </h1>
+
+            {/* Description */}
+            <p className="mt-5 text-gray-400 text-base sm:text-lg leading-relaxed">
+              I'm a developer who loves building modern,
+              interactive applications and exploring new
+              technologies.
+            </p>
+
+            {/* Clarion */}
+            <div className="mt-6">
+              <span className="text-[#45C7D4] font-bold tracking-[0.35em] text-sm">
+                WELCOME TO <b className='text-red-500 text-2xl'>CLARION </b> 
+              </span>
+            </div>
+
+            {/* Continue */}
+            <button
+              onClick={closeIntro}
+              className="
+          mt-10
+          px-8
+          py-3
+          rounded-xl
+          bg-[#45C7D4]
+          text-[#061014]
+          font-bold
+
+          transition-all duration-300
+
+          hover:scale-105
+          hover:shadow-[0_0_35px_rgba(69,199,212,0.5)]
+
+          active:scale-95
+        "
+            >
+              <span className="flex items-center gap-2">
+                Continue
+                <i className="ri-arrow-right-line" />
+              </span>
+            </button>
+
+          </div>
+        </div>
+      )}
 
       {/* ================= LOGIN CARD ================= */}
 

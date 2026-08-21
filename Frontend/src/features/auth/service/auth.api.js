@@ -1,17 +1,18 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: "http://localhost:3000",
-    withCredentials: true,
-
+    // Agar production hai toh base URL empty ("") rahega, nahi toh local backend ka URL use hoga
+    baseURL: import.meta.env.PROD ? "" : "http://localhost:3000",
+    withCredentials: true
 })
-export async function register({email, username, password}) {
+
+export async function register({ email, username, password }) {
 
     const response = await api.post('/api/auth/register', { email, username, password })
     return response.data
 }
 
-export async function login({email, password}) {
+export async function login({ email, password }) {
 
     const response = await api.post('/api/auth/login', { email, password })
     return response.data
@@ -22,7 +23,7 @@ export async function getMe() {
     return response.data
 }
 
-  export async function logout() {
-        const response = await api.post('/api/auth/logout');
-        return response.data;
-    }
+export async function logout() {
+    const response = await api.post('/api/auth/logout');
+    return response.data;
+}

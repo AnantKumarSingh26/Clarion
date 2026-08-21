@@ -43,6 +43,7 @@ export function useAuth() {
             dispatch(setLoading(false))
         }
     }
+    //! -------------------------Logout -----------------------------
      async function handleLogout() {
         try {
             await logout();

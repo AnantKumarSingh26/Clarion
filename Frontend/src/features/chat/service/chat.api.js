@@ -1,8 +1,9 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000',
-    withCredentials:true
+    // Agar production hai toh base URL empty ("") rahega, nahi toh local backend ka URL use hoga
+    baseURL: import.meta.env.PROD ? "" : "http://localhost:3000",
+    withCredentials: true
 })
 
 export const sendMessage = async ({ message, chatId, webSearch = false }) => {

@@ -1,7 +1,8 @@
 import { io } from "socket.io-client";
 
 export const initializeSocketConnection = () => {
-    const socket = io  ('http://localhost:3000', {
+    const socketUrl = import.meta.env.PROD ? '/':'http://localhost:3000';
+    const socket = io  (socketUrl, {
         withCredentials: true,
     })
 

@@ -77,47 +77,47 @@ export async function verifyEmail(req, res) {
 }
 
 export async function login(req, res) {
-    const {email, password} = req.body;
-    const user = await userModel.findOne({email})
-    
-    if(!user){
+    const { email, password } = req.body;
+    const user = await userModel.findOne({ email })
+
+    if (!user) {
         return res.status(400).json({
-            message:"Invalid email",
-            success:false,
-            err:"user Not found"
+            message: "Invalid email",
+            success: false,
+            err: "user Not found"
         })
     }
     const isPasswordMatch = await user.comparePassword(password);
-    if(!isPasswordMatch){
+    if (!isPasswordMatch) {
         return res.status(400).json({
-            message:"Invalid Password",
-            success:false,
-            err:"Password don't match"
+            message: "Invalid Password",
+            success: false,
+            err: "Password don't match"
         })
     }
-    if(!user.verified){
+    if (!user.verified) {
         return res.status(400).json({
-            message:'Please verify your email before logging in',
-            success:false,
-            err:'Email not verified'
+            message: 'Please verify your email before logging in',
+            success: false,
+            err: 'Email not verified'
         })
     }
 
     const token = jwt.sign({
-        id:user._id,
-        username:user.username,
-        email:user.email
-    },process.env.JWT_SECRET,{expiresIn:'7d'})
+        id: user._id,
+        username: user.username,
+        email: user.email
+    }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-    res.cookie("token",token)
+    res.cookie("token", token)
 
     res.status(200).json({
-        message:'Login Successful',
-        success:true,
-        user:{
-            id:user._id,
-            username:user.username,
-            email:user.email
+        message: 'Login Successful',
+        success: true,
+        user: {
+            id: user._id,
+            username: user.username,
+            email: user.email
         }
     })
 }
@@ -126,25 +126,25 @@ export async function getMe(req, res) {
     const userId = req.user.id;
     const user = await userModel.findById(userId).select('-password')
 
-    if(!user){
+    if (!user) {
         return res.status(404).json({
-            message:'User not found',
-            success:false,
-            err:'User not Registered'
+            message: 'User not found',
+            success: false,
+            err: 'User not Registered'
         })
     }
     res.status(200).json({
-        message:'User details are :',
-        success:true,
+        message: 'User details are :',
+        success: true,
         user
 
     })
 }
 
-   export async function logout(req, res) {
-        res.clearCookie("token");
-        res.status(200).json({
-            message: "Logged out successfully",
-            success: true
-        });
-    }
+export async function logout(req, res) {
+    res.clearCookie("token");
+    res.status(200).json({
+        message: "Logged out successfully",
+        success: true
+    });
+}

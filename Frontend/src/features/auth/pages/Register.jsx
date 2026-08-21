@@ -1,21 +1,61 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../hook/useAuthg";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitForm = (event) => {
+  const { handleRegister } = useAuth();
+  const navigate = useNavigate();
+
+  const submitForm = async (event) => {
     event.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    if (!username.trim() || !email.trim() || !password) {
+      setErrorMessage("All fields are required");
+      return;
+    }
+
+    if (username.trim().length < 3) {
+      setErrorMessage("Username must be at least 3 characters");
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters");
+      return;
+    }
 
     const payload = {
-      username,
-      email,
+      username: username.trim(),
+      email: email.trim(),
       password,
     };
 
-    console.log("Register payload:", payload);
+    try {
+      setIsSubmitting(true);
+      await handleRegister(payload);
+      setSuccessMessage("Account created successfully! Please check your email for the verification link.");
+      setTimeout(() => {
+        navigate("/login");
+      }, 3500);
+    } catch (err) {
+      const errorMsg =
+        err.response?.data?.message ||
+        err.response?.data?.errors?.[0]?.msg ||
+        err.message ||
+        "Registration failed. Please try again.";
+      setErrorMessage(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -108,6 +148,22 @@ const Register = () => {
               Join and start exploring with your AI companion
             </p>
           </div>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs sm:text-sm text-center flex items-center justify-center gap-2">
+              <i className="ri-error-warning-line text-base" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
+
+          {/* Success Message */}
+          {successMessage && (
+            <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm text-center flex items-center justify-center gap-2">
+              <i className="ri-checkbox-circle-line text-base" />
+              <span>{successMessage}</span>
+            </div>
+          )}
 
           {/* ================= EMAIL ================= */}
 
@@ -205,7 +261,8 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 id="pwd"
-                placeholder="Create a password"
+                placeholder="Create a password (min. 6 chars)"
+                minLength={6}
                 className="
                   w-full
                   bg-white/[0.03]
@@ -230,6 +287,7 @@ const Register = () => {
 
           <button
             type="submit"
+            disabled={isSubmitting}
             className="
               relative
               w-full
@@ -244,17 +302,29 @@ const Register = () => {
               hover:scale-[1.02]
               hover:shadow-[0_0_35px_rgba(69,199,212,0.5)]
               active:scale-[0.97]
+              disabled:opacity-60
+              disabled:cursor-not-allowed
               group
             "
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              Create Account
-
-              <i className="ri-arrow-right-line transition-transform group-hover:translate-x-1" />
+              {isSubmitting ? (
+                <>
+                  <i className="ri-loader-4-line animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                <>
+                  Create Account
+                  <i className="ri-arrow-right-line transition-transform group-hover:translate-x-1" />
+                </>
+              )}
             </span>
 
             {/* Button shine animation */}
-            <div className="absolute inset-0 bg-white/30 -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12" />
+            {!isSubmitting && (
+              <div className="absolute inset-0 bg-white/30 -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12" />
+            )}
           </button>
 
           {/* ================= LOGIN LINK ================= */}

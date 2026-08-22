@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hook/useAuthg";
+import RegisterPopup from "./RegisterPopup";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const { handleRegister } = useAuth();
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ const Register = () => {
   const submitForm = async (event) => {
     event.preventDefault();
     setErrorMessage("");
-    setSuccessMessage("");
 
     if (!username.trim() || !email.trim() || !password) {
       setErrorMessage("All fields are required");
@@ -42,10 +42,7 @@ const Register = () => {
     try {
       setIsSubmitting(true);
       await handleRegister(payload);
-      setSuccessMessage("Account created successfully! Please check your email for the verification link.");
-      setTimeout(() => {
-        navigate("/login");
-      }, 3500);
+      setShowSuccessPopup(true);
     } catch (err) {
       const errorMsg =
         err.response?.data?.message ||
@@ -157,13 +154,7 @@ const Register = () => {
             </div>
           )}
 
-          {/* Success Message */}
-          {successMessage && (
-            <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm text-center flex items-center justify-center gap-2">
-              <i className="ri-checkbox-circle-line text-base" />
-              <span>{successMessage}</span>
-            </div>
-          )}
+
 
           {/* ================= EMAIL ================= */}
 
@@ -347,6 +338,13 @@ const Register = () => {
 
         </div>
       </form>
+
+      {/* ================= SUCCESS POPUP ================= */}
+      <RegisterPopup
+        isOpen={showSuccessPopup}
+        email={email}
+        onClose={() => setShowSuccessPopup(false)}
+      />
     </main>
   );
 };

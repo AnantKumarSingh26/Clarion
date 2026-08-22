@@ -1,21 +1,14 @@
 import nodemailer from 'nodemailer'
 
 const transporter = nodemailer.createTransport({
-    // service: "gmail",
+    service: 'gmail',
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
-        // type: 'OAuth2',
-
         user: process.env.GOOGLE_USER,
         pass: process.env.GOOGLE_APP_PASSWORD,
-
-        // clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        // refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-        // clientId: process.env.GOOGLE_CLIENT_ID
     },
-    family: 4
 })
 transporter.verify()
     .then(() => {
@@ -28,7 +21,7 @@ transporter.verify()
 export async function sendEmail(to, subject, html, text) {
     const mailOptions = {
         from: process.env.GOOGLE_USER,
-        to: to,
+         to,
         subject,
         html,
         text
